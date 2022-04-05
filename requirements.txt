@@ -1,0 +1,4 @@
+nextcord
+numpy
+torch
+opencv-python
