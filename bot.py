@@ -50,6 +50,13 @@ async def detect(ctx):
     # delete the image
     os.remove("detect.jpg")
 
+# add a help command
+@bot.command()
+async def help(ctx):
+    embed = nextcord.Embed(title="Help", description="This is a help command", color=0x00ff00)
+    embed.add_field(name="ping", value="pong", inline=False)
+    embed.add_field(name="detect", value="detect", inline=False)
+    await ctx.send(embed=embed)
 
 with open("token.txt", "r") as f:
     token = f.read()
