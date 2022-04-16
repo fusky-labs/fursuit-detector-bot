@@ -31,6 +31,10 @@ async def detect(ctx):
     # get the image from the message
     print(ctx.message.attachments[0].url)
     img_url = ctx.message.attachments[0].url
+    processing_embed = embed = nextcord.Embed(title="Processing...", color=0x00ff00)
+    await ctx.send(embed=processing_embed)
+    # delete the message processing embed
+    await ctx.message.delete()
     # get the image from the url
     req = Request(img_url, headers={'User-Agent': 'Mozilla/5.0'})
     img_data = urlopen(req).read()
@@ -39,8 +43,10 @@ async def detect(ctx):
     boxes = do_detect(model_pt, cv2.resize(img, (416, 416)), 0.5, 0.4, use_cuda=False)
     # plot the boxes
     plot_boxes_cv2(img, boxes[0], "detect.jpg", class_names=["furry"])
-    # send the image
-    await ctx.send(file=nextcord.File("detect.jpg"))
+    # send the image in a cool embed
+    embed = nextcord.Embed(title="Results", description=f"furries detected: {len(boxes[0])}", color=0x00ff00)
+    embed.set_image(url="attachment://detect.jpg")
+    await ctx.send(embed=embed, file=nextcord.File("detect.jpg", "detect.jpg"))
     # delete the image
     os.remove("detect.jpg")
 
